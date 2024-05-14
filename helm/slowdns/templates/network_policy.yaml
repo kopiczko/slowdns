@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "slowdns.fullname" . }}
+  labels:
+    {{- include "slowdns.labels" . | nindent 4 }}
+spec:
+  egress:
+  - {}
+  ingress:
+  - ports:
+    - port: {{ .Values.service.port }}
+      protocol: UDP
+    - port: {{ .Values.service.port }}
+      protocol: TCP
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      {{- include "slowdns.selectorLabels" . | nindent 6 }}
+  policyTypes:
+  - Egress
+  - Ingress
