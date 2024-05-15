@@ -29,6 +29,34 @@ To build `kopiczko/slowdns` docker image:
 make docker-build
 ```
 
+## Example CoreDNS configuration
+
+Assuming all defaults in `values.yaml`:
+
+```
+    (cache-snip) {
+      cache 30
+    }
+
+    (log-snip) {
+      log . {
+        class denial
+        class error
+      }
+    }
+
+    (loadbalance-snip) {
+      loadbalance round_robin
+    }
+
+    my.test.io:1053 {
+      import cache-snip
+      forward . 172.31.0.11
+      import log-snip
+      import loadbalance-snip
+    }
+```
+
 ## Example usage
 
 (see `dig` commands on the bottom)
